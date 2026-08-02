@@ -4,15 +4,23 @@ import pytest
 import pandas as pd
 import numpy as np
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from src.predict import predict_single, validate_input
-from src.train import build_pipeline, save_model
+from src.train import save_model
+
+# 银行营销数据的分类特征
+CAT_FEATURES = [
+    "job", "marital", "education", "default", "housing", "loan",
+    "contact", "month", "day_of_week", "poutcome",
+]
 
 
 @pytest.fixture
 def simple_model(tmp_path):
-    """训练一个简单的二分类模型用于测试."""
+    """训练一个可处理混合数据的二分类模型用于测试."""
     np.random.seed(42)
     n = 100
     X = pd.DataFrame({
@@ -38,8 +46,22 @@ def simple_model(tmp_path):
     })
     y = np.random.choice([0, 1], n)
 
+    numeric_features = [c for c in X.columns if c not in CAT_FEATURES]
+    cat_features_present = [c for c in CAT_FEATURES if c in X.columns]
+
+    preprocessor = ColumnTransformer([
+        ("num", Pipeline([
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]), numeric_features),
+        ("cat", Pipeline([
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
+        ]), cat_features_present),
+    ])
+
     pipe = Pipeline([
-        ("scaler", StandardScaler()),
+        ("preprocessor", preprocessor),
         ("classifier", LogisticRegression(max_iter=2000, random_state=42)),
     ])
     pipe.fit(X, y)
