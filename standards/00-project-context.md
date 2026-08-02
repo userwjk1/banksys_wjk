@@ -95,8 +95,8 @@ banksys_wjk/
 |---|---|---|
 | `<APP>` | `banksys_wjk` | 应用名/镜像名/容器名 |
 | `<DEPLOY_DIR>` | `/opt/banksys_wjk` | 服务器部署目录 |
-| `<PORT>` | `8888` | 服务端口 |
-| `<PORT_MAX>` | `8895` | 端口回退上限 |
+| `<PORT>` | `9333` | 服务端口 |
+| `<PORT_MAX>` | `9340` | 端口回退上限 |
 | `<PYVER>` | `3.11` | Python 版本 |
 | `<HEALTHCHECK>` | `/_stcore/health` | Streamlit 内置健康检查端点 |
 | `<SSH_USER>` | `root` | 部署用户(示例) |

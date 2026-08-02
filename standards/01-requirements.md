@@ -60,12 +60,12 @@
 - AC1: 从 `main` 开 feature 分支完成初始化,不直接 push main。
 - AC2: PR 触发 CI,至少包含 ruff 格式检查、ruff 静态检查、pytest 单元测试(覆盖率 >= 80%)、docker build 构建检查。
 - AC3: CI 全绿后合并 main。
-- AC4: 合并 main 自动触发 CD,部署到端口 8888(或回退区间 8888-8895),Streamlit 健康检查通过。
+- AC4: 合并 main 自动触发 CD,部署到端口 9333(或回退区间 9333-8895),Streamlit 健康检查通过。
 - AC5: 完成后更新 `standards/PROGRESS.md`。
 
 技术备注:
 - 容器名和应用名统一为 `banksys_wjk`。
-- Streamlit 默认端口 8501,本容器映射到主机 8888。
+- Streamlit 默认端口 8501,本容器映射到主机 9333。
 
 ---
 
@@ -163,14 +163,14 @@
 
 验收标准:
 - AC1: Given Dockerfile 已就绪,When 执行 `docker build -t banksys_wjk:latest .`,Then 构建成功无错误。
-- AC2: Given 镜像已构建,When 执行 `docker run -d -p 8888:8501 --name banksys_wjk banksys_wjk:latest`,Then 容器正常启动。
-- AC3: Given 容器已运行,Then Streamlit 应用可通过 `http://localhost:8888` 访问,含数据分析页和预测页两个页面。
+- AC2: Given 镜像已构建,When 执行 `docker run -d -p 9333:8501 --name banksys_wjk banksys_wjk:latest`,Then 容器正常启动。
+- AC3: Given 容器已运行,Then Streamlit 应用可通过 `http://localhost:9333` 访问,含数据分析页和预测页两个页面。
 - AC4: Given 部署完成,Then Streamlit 内置健康检查端点 `/_stcore/health` 返回 200。
 - AC5: Dockerfile 支持国内镜像源参数 `PIP_INDEX_URL`,默认使用清华源。
 
 技术备注:
 - 基础镜像 `python:3.11-slim`。
-- Streamlit 容器内默认端口 8501,映射到主机 8888。
+- Streamlit 容器内默认端口 8501,映射到主机 9333。
 - 数据文件通过 `COPY` 或 volume 挂载进入容器(小数据直接 COPY,大数据用 volume)。
 - 模型文件 `models/model.joblib` 需在构建镜像前训练好并 COPY 进镜像。
 
@@ -181,7 +181,7 @@
 - **安全**:密钥只进 Secrets,不进 Git;预测输入校验防止恶意输入。
 - **可维护**:一需求一小 PR,避免大爆炸式提交。
 - **可测试**:核心逻辑必须有单元测试,覆盖率 >= 80%;数据分析函数和预测函数均为纯函数,易于测试。
-- **可部署**:部署后 Streamlit 健康检查必须返回 200;端口 8888。
+- **可部署**:部署后 Streamlit 健康检查必须返回 200;端口 9333。
 - **代码质量**:通过 ruff 格式检查和静态检查。
 - **模型质量**:AUC ≥ 0.75,准确率 ≥ 80%,训练过程无数据泄漏。
 - **性能**:数据分析页面首次加载 ≤ 5 秒(带缓存);单次预测响应 ≤ 2 秒。
