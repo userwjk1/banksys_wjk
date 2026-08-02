@@ -24,7 +24,7 @@ jobs:
         run: ruff format .
 
       - name: Ruff lint
-        run: ruff check .
+        run: ruff check --fix .
 
       - name: Run tests with coverage
         run: pytest --cov=src --cov-fail-under=80 -v

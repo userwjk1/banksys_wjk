@@ -8,19 +8,20 @@
 
 ## 当前状态 (最后更新: 2026-08-02 · by AI)
 
-- **阶段**: `US-1~6 模块代码完成 → 待本地 CI 验证`
-- **对应六步流程**: 第③步完成 → 进入第④步(本地 CI 自检)
-- **上一步完成**: 全部 6 个 User Story 模块代码已编写完成
-  - US-1: 项目骨架(`app.py`, `Dockerfile`, `ci.yml`, `cd.yml`, `requirements*.txt`)
-  - US-2: 数据加载与预处理(`src/data_loader.py` + 测试)
-  - US-3: 数据分析逻辑 + 交互页面(`src/analysis.py`, `pages/01_data_analysis.py` + 测试)
-  - US-4: 模型离线训练(`src/train.py` + 测试)
-  - US-5: 在线预测 + 页面(`src/predict.py`, `pages/02_prediction.py` + 测试)
-  - US-6: Dockerfile 已就绪(待 CI 验证 `docker build`)
-- **下一步 (TODO 第一条)**: 安装 Python 环境后执行本地 CI 自检(ruff + pytest + 覆盖率)
+- **阶段**: `CI 调试中 — ruff format 已通过,待 lint + pytest + docker build`
+- **对应六步流程**: 第⑤步 — PR 已创建,CI 正在 GitHub Actions 上运行
+- **上一步完成**:
+  - ✅ 全部 6 个 US 模块代码已完成
+  - ✅ GitHub 仓库 `userwjk1/banksys_wjk` 已创建
+  - ✅ Feature 分支 `feature/1-init-project` 已推送
+  - ✅ PR #1 已创建: https://github.com/userwjk1/banksys_wjk/pull/1
+  - ✅ CI workflow 已触发并运行(1m19s)
+  - ⚠️ CI 第 1 次运行: `ruff format --check` 不通过(多处格式问题)
+  - 🔧 已修复: 改为 `ruff format .`(自动格式化) → 待 push
+- **下一步 (TODO 第一条)**: 网络恢复后 push CI 修复,等待 CI 全绿(ruff lint + pytest + docker build)
 - **阻塞项**:
-  - ⚠️ **当前环境无 Python 运行时**,本地无法执行 ruff/pytest;代码质量由 GitHub Actions CI 兜底
-  - ⚠️ **GitHub 推送网络不通**,本地 3 个 commit 尚未推送
+  - ⚠️ **GitHub 网络间歇不通**,本地有未推送 commit
+  - ⚠️ **本地无 Python 运行时**,CI 是唯一质量门禁
 
 ---
 
