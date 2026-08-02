@@ -94,7 +94,7 @@ class TestPreprocess:
 class TestGetProcessedData:
     """测试 get_processed_data 便捷函数."""
 
-    def test_returns_X_y(self, sample_data_path):
+    def test_returns_features_and_target(self, sample_data_path):
         """返回特征矩阵 X 和目标 y."""
         X, y = get_processed_data(sample_data_path, target_col="subscribe")
         assert isinstance(X, pd.DataFrame)
@@ -104,7 +104,7 @@ class TestGetProcessedData:
         assert "subscribe" not in X.columns
         assert set(y.unique()).issubset({0, 1})
 
-    def test_no_target_col_returns_only_X(self, sample_data_path):
+    def test_no_target_col_returns_only_features(self, sample_data_path):
         """数据无目标列时只返回 X,y 为 None."""
         df = load_data(sample_data_path)
         df_no_target = df.drop(columns=["subscribe"])

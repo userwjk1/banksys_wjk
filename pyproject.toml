@@ -5,6 +5,10 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
 
+[tool.ruff.lint.pep8-naming]
+# ML 领域约定: X=特征矩阵, y=目标向量, X_train/X_test 同理
+ignore-names = ["X", "X_train", "X_test", "y", "y_train", "y_test"]
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
