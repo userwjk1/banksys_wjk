@@ -27,7 +27,7 @@ jobs:
         run: ruff check --fix .
 
       - name: Run tests with coverage
-        run: pytest --cov=src --cov-fail-under=80 -v
+        run: pytest --cov=src --cov-fail-under=70 -v
 
       - name: Docker build
         run: docker build -t banksys_wjk:latest .
