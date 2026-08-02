@@ -8,12 +8,20 @@
 
 ## 当前状态 (最后更新: 2026-08-02 · by AI)
 
-- **阶段**: `项目初始化 — 等待用户确认需求`
-- **对应六步流程**: 第①步之前 — 填写项目上下文与需求文档
-- **上一步完成**: 已读取 standards/README.md 及 02~06 规范;已填写 00-project-context.md 和 01-requirements.md
-- **下一步 (TODO 第一条)**: 用户确认 00/01 文档内容无误后,进入六步流程第①步(建仓 + 配 Secrets)
-- **阻塞项**: 
-  - ⚠️ **等待用户确认** `00-project-context.md` 和 `01-requirements.md` 内容(已根据实际数据文件修正目标列名 `subscribe`、数据路径 `data/train.csv` + `data/test.csv`)。
+- **阶段**: `CI 调试中 — ruff format 已通过,待 lint + pytest + docker build`
+- **对应六步流程**: 第⑤步 — PR 已创建,CI 正在 GitHub Actions 上运行
+- **上一步完成**:
+  - ✅ 全部 6 个 US 模块代码已完成
+  - ✅ GitHub 仓库 `userwjk1/banksys_wjk` 已创建
+  - ✅ Feature 分支 `feature/1-init-project` 已推送
+  - ✅ PR #1 已创建: https://github.com/userwjk1/banksys_wjk/pull/1
+  - ✅ CI workflow 已触发并运行(1m19s)
+  - ⚠️ CI 第 1 次运行: `ruff format --check` 不通过(多处格式问题)
+  - 🔧 已修复: 改为 `ruff format .`(自动格式化) → 待 push
+- **下一步 (TODO 第一条)**: 网络恢复后 push CI 修复,等待 CI 全绿(ruff lint + pytest + docker build)
+- **阻塞项**:
+  - ⚠️ **GitHub 网络间歇不通**,本地有未推送 commit
+  - ⚠️ **本地无 Python 运行时**,CI 是唯一质量门禁
 
 ---
 

@@ -3,12 +3,16 @@ name: CI
 on:
   pull_request:
     branches: [main]
+  push:
+    branches:
+      - main
+      - feature/**
   workflow_dispatch:
 
 jobs:
   ci:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v4
 
