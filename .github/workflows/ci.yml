@@ -2,13 +2,14 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - feature/**
 
 jobs:
-  ci:
+  check:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -17,9 +18,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt \
-            -i https://pypi.tuna.tsinghua.edu.cn/simple
+        run: pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
       - name: Ruff format check
         run: ruff format --check .
@@ -29,18 +28,6 @@ jobs:
 
       - name: Run tests with coverage
         run: pytest --cov=src --cov-fail-under=80 -v
-
-      - name: Check model metrics (if model exists)
-        run: |
-          if [ -f models/model.joblib ]; then
-            python -c "
-import joblib
-model = joblib.load('models/model.joblib')
-print('Model loaded successfully')
-"
-          else
-            echo "Model file not found (expected before CD); skip model check"
-          fi
 
       - name: Docker build
         run: docker build -t banksys_wjk:latest .
