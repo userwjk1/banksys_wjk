@@ -63,29 +63,24 @@ def build_pipeline(model_type: str = "rf") -> Pipeline:
             f"无效的模型类型: {model_type!r},可选: {list(MODEL_FACTORY)}"
         )
 
-    # 数值特征处理:填充缺失值 + 标准化
-    numeric_transformer = Pipeline([
-        ("imputer", SimpleImputer(strategy="median")),
-        ("scaler", StandardScaler()),
-    ])
-
     # 分类特征处理:填充缺失值 + OneHot 编码
     categorical_transformer = Pipeline([
         ("imputer", SimpleImputer(strategy="most_frequent")),
         ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
     ])
 
+    # ColumnTransformer:分类列做 OneHot,其余列保留数值
     preprocessor = ColumnTransformer(
         transformers=[
-            ("num", numeric_transformer, None),  # None = 自动识别数值列
             ("cat", categorical_transformer, CAT_FEATURES),
         ],
-        remainder="drop",
+        remainder="passthrough",
     )
 
     model = MODEL_FACTORY[model_type]
     return Pipeline([
         ("preprocessor", preprocessor),
+        ("scaler", StandardScaler()),
         ("classifier", model),
     ])
 
