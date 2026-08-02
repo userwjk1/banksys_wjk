@@ -11,12 +11,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: SSH deploy
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "app.py,requirements.txt,Dockerfile,src,data,models,pages"
+          target: "/opt/banksys_wjk"
+          rm: false
+
+      - name: Build and deploy on server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           script: |
             set -e
 
@@ -25,10 +37,8 @@ jobs:
             PORT_MAX=9340
             DEPLOY_DIR="/opt/${APP}"
 
-            mkdir -p "${DEPLOY_DIR}"
             cd "${DEPLOY_DIR}"
 
-            # Copy files via scp handled by appleboy, build and run
             docker build --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple -t ${APP}:latest .
 
             port_in_use() {
